@@ -1,0 +1,83 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Numero - Application Hors-ligne</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Numero</h1>
+            <button id="installBtn" class="install-btn">Installer l'application</button>
+        </header>
+
+        <nav class="category-nav">
+            <button data-cat="GH18" class="active">GH18</button>
+            <button data-cat="CIV10">CIV10</button>
+            <button data-cat="CIV13">CIV13</button>
+            <button data-cat="CIV16">CIV16</button>
+        </nav>
+
+        <div class="submenu">
+            <button data-menu="entrees" class="active">Entrées</button>
+            <button data-menu="consult">Consult</button>
+            <button data-menu="stats">Stats</button>
+        </div>
+
+        <!-- Section Entrées -->
+        <section id="entrees" class="content active">
+            <div class="entry-form">
+                <div class="input-group">
+                    <label for="numberInput">Nombre (000-999)</label>
+                    <input type="number" id="numberInput" min="0" max="999" placeholder="000-999">
+                </div>
+                <div class="input-group">
+                    <label for="criterionSelect">Critère</label>
+                    <select id="criterionSelect">
+                        <option value="P1">P1</option>
+                        <option value="P2">P2</option>
+                        <option value="P3">P3</option>
+                        <option value="P4">P4</option>
+                        <option value="P5">P5</option>
+                        <option value="P6">P6</option>
+                        <option value="P7">P7</option>
+                        <option value="P8">P8</option>
+                        <option value="P9">P9</option>
+                        <option value="P10">P10</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="dataInput">Donnée (0-9)</label>
+                    <input type="number" id="dataInput" min="0" max="9" placeholder="0-9">
+                </div>
+            </div>
+            <button id="saveEntry">Enregistrer</button>
+        </section>
+
+        <!-- Section Consult -->
+        <section id="consult" class="content">
+            <input type="number" id="searchNumber" min="0" max="999" placeholder="Rechercher un nombre">
+            <div id="consultResults"></div>
+        </section>
+
+        <!-- Section Stats -->
+        <section id="stats" class="content">
+            <div id="statsDisplay"></div>
+        </section>
+
+        <button id="resetData" class="reset-btn">Réinitialiser les données</button>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js');
+        }
+    </script>
+</body>
+</html>

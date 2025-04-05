@@ -1,0 +1,128 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #00b4d8;
+}
+
+.category-nav, .submenu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #2d2d2d;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #00b4d8;
+}
+
+button.active {
+    background: #00b4d8;
+}
+
+.content {
+    display: none;
+    background: #2d2d2d;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.content.active {
+    display: block;
+}
+
+.entry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 1rem;
+    color: #ccc;
+}
+
+input, select {
+    padding: 8px;
+    border: none;
+    border-radius: 3px;
+    background: #3d3d3d;
+    color: #fff;
+    font-size: 1rem;
+}
+
+input:focus, select:focus {
+    outline: none;
+    background: #4d4d4d;
+}
+
+.reset-btn {
+    background: #ff3333;
+    margin-top: 20px;
+}
+
+.install-btn {
+    background: #00cc00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .category-nav, .submenu {
+        flex-wrap: wrap;
+    }
+}
+
+@media (min-width: 768px) {
+    .entry-form {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .input-group {
+        flex: 1;
+    }
+input::placeholder, select::placeholder {
+    color: #888;
+    opacity: 1;
+}
