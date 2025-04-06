@@ -121,6 +121,25 @@ input::placeholder, select::placeholder {
     display: none;
 }
 
+/* Styles pour la section Dernière entrée */
+.last-entry {
+    margin-top: 20px;
+    padding: 15px;
+    background: #2d2d2d;
+    border-radius: 5px;
+}
+
+.last-entry h3 {
+    font-size: 1.2rem;
+    color: #00b4d8;
+    margin-bottom: 10px;
+}
+
+.last-entry p {
+    font-size: 1rem;
+    color: #ccc;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .category-nav, .submenu {
