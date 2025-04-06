@@ -1,13 +1,13 @@
 {
     "name": "Numero",
     "short_name": "Numero",
-    "start_url": "/",
+    "start_url": "/Numero/",
     "display": "standalone",
     "background_color": "#1a1a1a",
     "theme_color": "#00b4d8",
     "icons": [
         {
-            "src": "icon.png",
+            "src": "/Numero/icon.png",
             "sizes": "192x192",
             "type": "image/png"
         }
