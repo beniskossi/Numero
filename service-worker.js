@@ -4,9 +4,8 @@ const urlsToCache = [
     '/Numero/index.html',
     '/Numero/styles.css',
     '/Numero/app.js',
-    '/Numero/manifest.json',
-    '/Numero/icon.png' 
-    // Retirez '/Numero/icon.png' pour l'instant, car le fichier n'existe pas
+    '/Numero/manifest.json'
+    // Ajoutez '/Numero/icon.png' si vous avez une icône
 ];
 
 self.addEventListener('install', event => {
