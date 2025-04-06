@@ -2,19 +2,26 @@ class NumeroApp {
     constructor() {
         this.currentCategory = 'GH18';
         this.db = null;
-        this.data = null; // Les données seront chargées depuis IndexedDB
-        this.initDB().then(() => this.loadData());
+        this.data = null;
+        this.lastEntry = null; // Pour stocker la dernière entrée
+        this.initDB().then(() => {
+            this.loadData();
+            this.loadLastEntry();
+        });
     }
 
     // Initialiser la base de données IndexedDB
     initDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('numeroDB', 1);
+            const request = indexedDB.open('numeroDB', 2); // Version 2 pour ajouter un nouveau magasin
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 if (!db.objectStoreNames.contains('data')) {
                     db.createObjectStore('data', { keyPath: 'key' });
+                }
+                if (!db.objectStoreNames.contains('lastEntry')) {
+                    db.createObjectStore('lastEntry', { keyPath: 'key' });
                 }
             };
 
@@ -30,7 +37,7 @@ class NumeroApp {
         });
     }
 
-    // Charger les données depuis IndexedDB
+    // Charger les données principales depuis IndexedDB
     loadData() {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -56,7 +63,32 @@ class NumeroApp {
         });
     }
 
-    // Sauvegarder les données dans IndexedDB
+    // Charger la dernière entrée depuis IndexedDB
+    loadLastEntry() {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error('Base de données non initialisée'));
+                return;
+            }
+
+            const transaction = this.db.transaction(['lastEntry'], 'readonly');
+            const store = transaction.objectStore('lastEntry');
+            const request = store.get('lastEntry');
+
+            request.onsuccess = (event) => {
+                this.lastEntry = event.target.result?.value || null;
+                this.displayLastEntry();
+                resolve(this.lastEntry);
+            };
+
+            request.onerror = (event) => {
+                console.error('Erreur lors du chargement de la dernière entrée :', event.target.error);
+                reject(event.target.error);
+            };
+        });
+    }
+
+    // Sauvegarder les données principales dans IndexedDB
     saveData() {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -77,6 +109,39 @@ class NumeroApp {
                 reject(event.target.error);
             };
         });
+    }
+
+    // Sauvegarder la dernière entrée dans IndexedDB
+    saveLastEntry() {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error('Base de données non initialisée'));
+                return;
+            }
+
+            const transaction = this.db.transaction(['lastEntry'], 'readwrite');
+            const store = transaction.objectStore('lastEntry');
+            const request = store.put({ key: 'lastEntry', value: this.lastEntry });
+
+            request.onsuccess = () => {
+                resolve();
+            };
+
+            request.onerror = (event) => {
+                console.error('Erreur lors de la sauvegarde de la dernière entrée :', event.target.error);
+                reject(event.target.error);
+            };
+        });
+    }
+
+    // Afficher la dernière entrée
+    displayLastEntry() {
+        const lastEntryText = document.getElementById('lastEntryText');
+        if (this.lastEntry) {
+            lastEntryText.textContent = `Catégorie: ${this.lastEntry.category}, Nombre: ${this.lastEntry.number}, Critère: ${this.lastEntry.criterion}, Donnée: ${this.lastEntry.value}`;
+        } else {
+            lastEntryText.textContent = 'Aucune entrée pour le moment.';
+        }
     }
 
     initEventListeners() {
@@ -176,6 +241,14 @@ class NumeroApp {
 
         this.data[this.currentCategory][number][criterion].push(value);
 
+        // Stocker la dernière entrée
+        this.lastEntry = {
+            category: this.currentCategory,
+            number: number,
+            criterion: criterion,
+            value: value
+        };
+
         // Réinitialiser les champs après l'enregistrement
         numberInput.value = '';
         criterionSelect.value = 'P1';
@@ -183,7 +256,9 @@ class NumeroApp {
 
         try {
             await this.saveData();
+            await this.saveLastEntry();
             this.updateDisplay();
+            this.displayLastEntry();
             alert('Donnée enregistrée avec succès !');
         } catch (err) {
             alert('Erreur lors de la sauvegarde : ' + err.message);
@@ -276,8 +351,8 @@ class NumeroApp {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const app = new NumeroApp();
-    // Attendre que la base de données soit initialisée avant d'ajouter les écouteurs d'événements
     await app.initDB();
     await app.loadData();
+    await app.loadLastEntry();
     app.initEventListeners();
 });
